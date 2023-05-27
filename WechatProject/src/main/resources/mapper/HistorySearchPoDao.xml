@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.wechat.dao.HistorySearchPoDao">
+    <select id="getHistorySearchByUserId" parameterType="Integer" resultType="com.project.wechat.mbg.pojo.HistorySearchPo">
+        select * from t_history_search
+        where user_id = #{userId}
+        <if test="cnt > 10">
+            order by id asc
+            limit 1,10
+        </if>
+    </select>
+    <select id="getUserHistoryCount" resultType="Integer">
+        select count(*) from t_history_search
+        where user_id = #{user_id}
+    </select>
+    <insert id="insertHS">
+        insert into t_history_search
+        <set>
+            <if test="user_id != null ">user_id = #{user_id},</if>
+            <if test="search_info != null">search_info = #{search_info},</if>
+        </set>
+    </insert>
+</mapper>

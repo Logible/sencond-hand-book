@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.wechat.dao.UtilsDao">
+
+    <select id="judgeHaveAttentionOrNot" parameterType="Integer" resultType="com.project.wechat.mbg.pojo.AttentionPo">
+        select * from t_attention where user_id = #{userId} and attention_id = #{followId}
+    </select>
+    <select id="judgeHaveFansOrNot" resultType="com.project.wechat.mbg.pojo.FansPo">
+        select * from t_fans where user_id = #{userId} and fans_id = #{fansId}
+    </select>
+    <select id="getSearchByName"  resultType="com.project.wechat.mbg.pojo.GoodsPo">
+        SELECT * FROM t_goods WHERE goods_name like CONCAT('%',#{keyword},'%')
+        <if test="userId != null">
+            and seller_id != #{userId}
+        </if>
+
+        <if test="sortType == null">
+            ORDER BY goods_price ASC
+        </if>
+        <if test="sortType == 1">
+            ORDER BY goods_price DESC
+        </if>
+        <if test="sortType == 0">
+            ORDER BY goods_price ASC
+        </if>
+    </select>
+    <select id="getGoodsByType" resultType="com.project.wechat.mbg.pojo.GoodsPo">
+            select * from t_goods where type_id = #{typeId}
+        /*0代表升序
+        1代表降序
+        */
+        <if test="sortType == null">
+            ORDER BY goods_price ASC
+        </if>
+        <if test="sortType == 1">
+            ORDER BY goods_price DESC
+        </if>
+        <if test="sortType == 0">
+            ORDER BY goods_price ASC
+        </if>
+    </select>
+    <select id="checkFavoriteIsExist" resultType="com.project.wechat.mbg.pojo.FavouritesPo">
+        select * from t_favourites where user_id = #{user_id} and goods_id = #{goods_id}
+    </select>
+    <select id="getUserById" resultType="com.project.wechat.mbg.pojo.UserPo">
+        select *
+               from t_user where user_id = #{userId}
+    </select>
+    <select id="getBeforeRegionById" resultType="com.project.wechat.dto.BeforeRegion">
+        select sc_name,belong from t_school_campus where sc_id = #{sc_id}
+    </select>
+    <select id="getSchoolById" resultType="String">
+        select school_name from t_school where id = #{schoolId}
+    </select>
+    <select id="getSchoolByUserId" resultType="String">
+        select school_name from t_school where id in
+            (select  school_id from t_user where user_id = #{userId})
+    </select>
+    <select id="getGoodsById" resultType="com.project.wechat.mbg.pojo.GoodsPo">
+        select * from t_goods where goods_id = #{goodsId}
+    </select>
+    <select id="getGoodsByChatId" resultType="com.project.wechat.mbg.pojo.GoodsPo">
+        SELECT * FROM t_goods WHERE goods_id in
+            (SELECT goods_id FROM t_chat_window WHERE id = #{chatId});
+    </select>
+    <select id="getUserByIdThroughChat" resultType="com.project.wechat.mbg.pojo.UserPo">
+        SELECT * FROM t_user WHERE user_id in
+             (SELECT
+                <if test="role == 1">
+                    seller_id
+                </if>
+
+                <if test="role == 0">
+                    user_id
+                </if>
+                FROM  t_chat_window WHERE id = #{chatId})
+    </select>
+    <select id="searchGoods" parameterType="com.project.wechat.dto.Properties"
+                                resultType="com.project.wechat.mbg.pojo.GoodsPo">
+        select * from t_goods
+        where (goods_name like CONCAT('%',#{searchText},'%')
+        or goods_introduce like CONCAT('%',#{searchText},'%'))
+        <if test="fineness != 0">
+            and fineness = #{fineness}
+        </if>
+        <if test="note != 0">
+            and note = #{note}
+        </if>
+        <if test="isMySchool.equals('yes')">
+            and school_id = #{schoolId}
+        </if>
+        and seller_id != #{user_id}
+        and good_status = 0
+        ORDER BY
+        case when t_goods.school_id = #{schoolId} then null else 0 END ASC
+
+        <if test="order != 0">
+            ,
+        </if>
+        <if test="order == 1">
+            goods_price DESC
+        </if>
+        <if test="order == 2">
+            goods_price ASC
+        </if>
+    </select>
+    <select id="getUserBySellerId" resultType="com.project.wechat.mbg.pojo.UserPo">
+        SELECT * FROM t_user WHERE user_id in
+            (SELECT user_id FROM t_seller WHERE seller_id = #{sellerId});
+    </select>
+    <select id="getTypeIdByTypeName" resultType="Integer">
+        select type_id from t_good_type where type_name = #{typeName}
+    </select>
+    <select id="getSchoolIdBySchoolName" resultType="Integer">
+        select id from t_school where school_name = #{schoolName}
+    </select>
+    <select id="getSchoolIdByUserId" resultType="Integer">
+        select school_id from t_user where user_id = #{userId}
+    </select>
+    <select id="getTypeNameByTypeId" resultType="String">
+        select type_name from t_good_type where type_id = #{typeId}
+    </select>
+    <select id="getAllGoods" resultType="com.project.wechat.mbg.pojo.GoodsPo">
+        select *  from t_goods
+    </select>
+    <select id="getGoodsSellerIdByGoodsId" resultType="Integer">
+        select seller_id from t_goods where goods_id = #{goodsId}
+    </select>
+    <select id="getGoodsIdByOrderId" resultType="Integer">
+        select goods_id from t_chat_window where id in
+            (select chat_wid from t_order where order_id = #{orderId})
+    </select>
+    <select id="isHSExist" resultType="Integer">
+        select id from t_history_search where user_id = #{userId} and search_info = #{searchInfo}
+    </select>
+    <select id="isHBExist" resultType="Integer">
+        select id from t_history_browsing where user_id = #{userId} and goods_id = #{goodsId}
+    </select>
+    <update id="updateHBTime">
+        update t_history_browsing set date = #{date} where user_id = #{userId} and goods_id = #{goodsId}
+    </update>
+
+
+</mapper>

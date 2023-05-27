@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.wechat.dao.OrderPo_OTIPoDao">
+    <select id="getDataFromOrderList" resultType="com.project.wechat.mbg.pojo.OrderPo_OTI">
+        select * from t_order where order_id = #{orderId} and agree_status = 1
+    </select>
+    <select id="getOrderList" resultType="com.project.wechat.mbg.pojo.OrderPo_OTI">
+        SELECT * FROM t_order WHERE chat_wid in
+            (SELECT id FROM t_chat_window
+            WHERE
+                <if test="role == 0">
+                    user_id =
+                </if>
+                <if test="role == 1">
+                    seller_id =
+                </if>
+
+                #{userId})
+
+        <if test="status == 0">
+            and status = 0
+        </if>
+        <if test="status == 1">
+            and status = 1
+        </if>
+            and agree_status = 1
+    </select>
+    <select id="getOrderListCnt" resultType="Integer">
+        SELECT count(*) FROM t_order WHERE chat_wid in
+        (SELECT id FROM t_chat_window
+        WHERE
+        <if test="role == 0">
+            user_id =
+        </if>
+        <if test="role == 1">
+            seller_id =
+        </if>
+
+        #{userId})
+
+        <if test="status == 0">
+            and status = 0
+        </if>
+        <if test="status == 1">
+            and status = 1
+        </if>
+        and agree_status = 1
+    </select>
+    <update id="updateOrderListUserStatus">
+        update t_order
+        <if test="role == 0">
+            set buyer_status = 1,status = 1
+        </if>
+        <if test="role == 1">
+            set seller_status = 1,
+        </if>
+        where order_id = #{orderId}
+    </update>
+    <update id="updateOrderListStatus">
+        update t_order
+        set status = 1
+        where order_id = #{orderId}
+    </update>
+    <update id="agreeOrder">
+        update t_order
+        set agree_status = 1
+        where order_id = #{orderId}
+    </update>
+    <update id="refuseOrder">
+        update t_order
+        set agree_status = -1,status = -1
+        where order_id = #{orderId}
+    </update>
+    <update id="cancelOrder">
+        update t_order
+        set status = -1
+        where order_id = #{orderId}
+    </update>
+    <select id="getUnreadMineAsBuyer" resultType="Integer">
+        select count(*) FROM t_order WHERE status = 0 and chat_wid in
+         (SELECT id FROM t_chat_window
+         WHERE user_id = #{userId});
+    </select>
+    <select id="getUnreadMineAsSeller" resultType="Integer">
+        select count(*) FROM t_order WHERE status = 0 and chat_wid in
+                (SELECT id FROM t_chat_window
+                                            WHERE seller_id = #{userId});
+    </select>
+    <select id="getOrder" resultType="com.project.wechat.mbg.pojo.OrderPo_OTI">
+        select * from t_order where order_id = #{orderId}
+    </select>
+    <delete id="deleteOrderById">
+        delete from t_order where order_id = #{orderId}
+    </delete>
+    <insert id="createOrder" useGeneratedKeys="true" keyProperty="order_id" parameterType="com.project.wechat.mbg.pojo.OrderPo_OTI">
+        insert into t_order(date,seller_status,buyer_status,location,chat_wid,status,agree_status)
+        values (#{date},0,0,#{location},#{chat_wid},0,0)
+    </insert>
+    <update id="updateOrder"  parameterType="com.project.wechat.mbg.pojo.OrderPo_OTI">
+        update t_order
+        <set>
+            <if test="date != null">date = #{date},</if>
+            <if test="seller_status != null">seller_status = #{seller_status},</if>
+            <if test="buyer_status != null">buyer_status = #{buyer_status},</if>
+            <if test="location != null">location = #{location},</if>
+            <if test="chat_wid != null">chat_wid = #{chat_wid},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="agree_status != null">agree_status = #{agree_status},</if>
+        </set>
+        where order_id = #{order_id}
+    </update>
+</mapper>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.wechat.dao.GoodsPoDao">
+    <select id="getReleaseFrom" resultType="com.project.wechat.mbg.pojo.GoodsPo">
+        select * from  t_goods where seller_id = #{userId} and good_status = 0
+    </select>
+    <insert id="releaseNewGood" parameterType="com.project.wechat.mbg.pojo.GoodsPo"
+    useGeneratedKeys="true" keyProperty="goods_id">
+        insert into t_goods(goods_price,goods_introduce,type_id,goods_collection,seller_id,goods_name,goods_picture,fineness,note,good_status,school_id,goods_contactInformation)
+        values (#{goods_price},#{goods_introduce},#{type_id},0,#{seller_id},#{goods_name},#{goods_picture},#{fineness},#{note},0,#{school_id}, #{goods_contactInformation})
+    </insert>
+    <insert id="addToFavorite">
+        insert into t_favourites (user_id,goods_id) values (#{user_id},#{goods_id})
+    </insert>
+    <delete id="cancelFavorite">
+        delete from t_favourites where user_id = #{user_id} and goods_id = #{goods_id}
+    </delete>
+    <update id="updateOrderStatus">
+        update t_order
+        set status = 1
+        where order_id = #{orderId} and user_id = #{userId} and seller_id = #{sellerId}
+    </update>
+    <update id="addSellerCount">
+        update t_seller set seller_count = seller_count + 1 where seller_id = #{sellerId}
+    </update>
+    <select id="selectAllGoods" resultType="com.project.wechat.mbg.pojo.GoodsPo">
+        select *
+        from t_goods
+        where good_status = 0
+        <if test="userId != null">
+            and seller_id != #{userId}
+        </if>
+        ORDER BY case when t_goods.school_id = #{schoolId} then null else 0 END ASC;
+    </select>
+    <update id="updateGoods" parameterType="com.project.wechat.mbg.pojo.GoodsPo">
+        update t_goods
+        <set>
+            <if test="goods_price != null">goods_price = #{goods_price},</if>
+            <if test="goods_introduce != null">goods_introduce = #{goods_introduce},</if>
+            <if test="type_id != null">type_id = #{type_id},</if>
+            <if test="goods_collection != null">goods_collection = #{goods_collection},</if>
+            <if test="goods_name != null">goods_name = #{goods_name},</if>
+            <if test="goods_picture != null">goods_picture = #{goods_picture},</if>
+            <if test="fineness != null">fineness = #{fineness},</if>
+            <if test="note != null">note = #{note},</if>
+        </set>
+
+        where goods_id = #{goods_id}
+
+    </update>
+    <update id="deleteGoods">
+        update t_goods set good_status = -1 where goods_id = #{goodsId}
+    </update>
+    <update id="updateGoodsStatus">
+        update t_goods
+        set good_status = 1
+        where goods_id = #{goodsId}
+    </update>
+    <update id="refuseGoodsStatus">
+        update t_goods
+        set good_status = 0
+        where goods_id = #{goodsId}
+    </update>
+    <update id="changeGoodsPrice">
+        update t_goods set goods_price = #{goodsPrice} where goods_id = #{goodsId}
+    </update>
+    <select id="getIReleaseCnt" resultType="Integer">
+        select count(*) from t_goods where seller_id = #{userId} and good_status = 0
+    </select>
+
+    <update id="addGoodsCollection">
+        update t_goods set goods_collection = goods_collection + 1 where goods_id = #{goodsId}
+    </update>
+
+    <update id="reduceGoodsCollection">
+        update t_goods set goods_collection = goods_collection - 1 where goods_id = #{goodsId}
+    </update>
+
+
+</mapper>

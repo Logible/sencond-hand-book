@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.wechat.mbg.mapper.RegionPoMapper">
+  <resultMap id="BaseResultMap" type="com.project.wechat.mbg.pojo.RegionPo">
+    <id column="sc_id" jdbcType="INTEGER" property="scId" />
+    <result column="sc_name" jdbcType="VARCHAR" property="scName" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="belong" jdbcType="VARCHAR" property="belong" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    sc_id, sc_name, type, belong
+  </sql>
+  <select id="selectByExample" parameterType="com.project.wechat.mbg.pojo.RegionPoExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_school_campus
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_school_campus
+    where sc_id = #{scId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_school_campus
+    where sc_id = #{scId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.project.wechat.mbg.pojo.RegionPoExample">
+    delete from t_school_campus
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.project.wechat.mbg.pojo.RegionPo">
+    insert into t_school_campus (sc_id, sc_name, type, 
+      belong)
+    values (#{scId,jdbcType=INTEGER}, #{scName,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
+      #{belong,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.project.wechat.mbg.pojo.RegionPo">
+    insert into t_school_campus
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="scId != null">
+        sc_id,
+      </if>
+      <if test="scName != null">
+        sc_name,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="belong != null">
+        belong,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="scId != null">
+        #{scId,jdbcType=INTEGER},
+      </if>
+      <if test="scName != null">
+        #{scName,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="belong != null">
+        #{belong,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.project.wechat.mbg.pojo.RegionPoExample" resultType="java.lang.Long">
+    select count(*) from t_school_campus
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_school_campus
+    <set>
+      <if test="record.scId != null">
+        sc_id = #{record.scId,jdbcType=INTEGER},
+      </if>
+      <if test="record.scName != null">
+        sc_name = #{record.scName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=VARCHAR},
+      </if>
+      <if test="record.belong != null">
+        belong = #{record.belong,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_school_campus
+    set sc_id = #{record.scId,jdbcType=INTEGER},
+      sc_name = #{record.scName,jdbcType=VARCHAR},
+      type = #{record.type,jdbcType=VARCHAR},
+      belong = #{record.belong,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.project.wechat.mbg.pojo.RegionPo">
+    update t_school_campus
+    <set>
+      <if test="scName != null">
+        sc_name = #{scName,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="belong != null">
+        belong = #{belong,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where sc_id = #{scId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.project.wechat.mbg.pojo.RegionPo">
+    update t_school_campus
+    set sc_name = #{scName,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      belong = #{belong,jdbcType=VARCHAR}
+    where sc_id = #{scId,jdbcType=INTEGER}
+  </update>
+</mapper>

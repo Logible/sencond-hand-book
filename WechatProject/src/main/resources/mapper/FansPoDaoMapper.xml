@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.wechat.dao.FansPoDao">
+    <select id="countFans" parameterType="Integer" resultType="Integer" >
+        select count(*) from t_fans where user_id = #{userId}
+    </select>
+    <insert id="addFans" parameterType="Integer" >
+        insert into t_fans (user_id,fans_id) values (#{userId},#{fansId})
+    </insert>
+    <delete id="unFansUser">
+        delete from t_fans where user_id = #{userId} and fans_id = #{fansId}
+    </delete>
+</mapper>

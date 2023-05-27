@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.wechat.dao.ChatsPoDao">
+    <select id="getUnreadMessages" resultType="Integer">
+        select count(*) from t_chats
+        where chat_id = #{chatId}
+        and status = 0
+        and send_id != #{userId}
+    </select>
+    <insert id="insertNewMessage" parameterType="com.project.wechat.mbg.pojo.ChatsPo">
+        insert into t_chats(
+            timestamp,
+            send_id,
+            content,
+            status,
+            chat_id,
+            order_id,
+            notice
+        ) values (
+                  #{timestamp},
+                  #{send_id},
+                  #{content},
+                  false,
+                  #{chat_id},
+                  #{order_id},
+                  #{notice}
+                         )
+    </insert>
+    <select id="getChatsBy" resultType="com.project.wechat.mbg.pojo.ChatsPo">
+        select * from t_chats where chat_id = #{chatWid}
+    </select>
+    <select id="getUserId" resultType="Integer">
+        select user_id from t_chat_window where id = #{chatWid}
+    </select>
+    <delete id="deleteChats">
+        delete from t_chats where chat_id = #{chatWid} and order_id is not null
+    </delete>
+    <select id="getAllChatWid" resultType="Integer">
+        select id from t_chat_window
+        where user_id = #{userId}
+        or seller_id = #{userId}
+    </select>
+    <update id="setAllHaveRead">
+        update t_chats set status = 1 where chat_id = #{chatId} and send_id != #{userId}
+    </update>
+    <insert id="createChatWin" useGeneratedKeys="true" keyProperty="id">
+        insert into t_chat_window
+        <set>
+            <if test="user_id != null">user_id = #{user_id},</if>
+            <if test="seller_id != null">seller_id = #{seller_id},</if>
+            <if test="goods_id != null">goods_id = #{goods_id},</if>
+        </set>
+    </insert>
+    <select id="isChatWExist" resultType="integer">
+        select id from t_chat_window where user_id = #{user_id}
+        and seller_id = #{seller_id}
+        and goods_id = #{goods_id}
+    </select>
+
+
+</mapper>

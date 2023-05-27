@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.wechat.dao.SchoolPoDao">
+    <select id="searchSchoolByName" resultType="com.project.wechat.mbg.pojo.SchoolPo">
+        select * from t_school where school_name like CONCAT('%',#{schoolName},'%') limit 10;
+    </select>
+</mapper>

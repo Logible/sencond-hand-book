@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.wechat.dao.OrderPoDao">
+    <select id="getDataFromOrderList" resultType="com.project.wechat.mbg.pojo.OrderPo">
+        select * from t_order
+       <where>
+           <if test="isFinished == 0">
+               and status = 0
+           </if>
+           <if test="isFinished == 1">
+                and status = 1
+           </if>
+           <if test="isBuyer == 0">
+                and seller_id = #{userId}
+           </if>
+           <if test="isBuyer == 1">
+                and user_id = #{userId}
+           </if>
+       </where>
+    </select>
+
+</mapper>

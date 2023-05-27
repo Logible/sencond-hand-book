@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.wechat.dao.UserPoDao">
+    <select id="selectAllUser" resultType="com.project.wechat.mbg.pojo.UserPo">
+        select * from t_user
+    </select>
+    <update id="banUser">
+        update t_user set user_status = -1 where user_id = #{userId}
+    </update>
+    <delete id="deleteUser">
+        delete from t_user where user_id = #{userId}
+    </delete>
+    <insert id="addUser" parameterType="com.project.wechat.mbg.pojo.UserPo"
+    useGeneratedKeys="true" keyProperty="user_id">
+        insert into t_user
+            (user_id,
+             nick_name,
+             user_status,
+             school_id,
+             gender,
+             avatar_url,
+             user_openid,
+             user_campus,
+             user_day,
+             user_introduce,
+             user_praise)
+            values
+                   (#{user_id},
+                    #{nick_name},
+                    0,
+                    #{school_id},
+                    #{gender},
+                    #{avatar_url},
+                    #{user_openid},
+                    #{user_campus},
+                    0,
+                    null,
+                    0)
+    </insert>
+    <select id="monitorIsExist" parameterType="String" resultType="com.project.wechat.mbg.pojo.SuPo">
+        select * from t_su where su_id = #{su_id} and su_password = #{su_password}
+    </select>
+    <select id="searchUser" parameterType="com.project.wechat.mbg.pojo.UserPo"
+                            resultType="com.project.wechat.mbg.pojo.UserPo">
+        select * from t_user
+        <where>
+            <if test="user_id != null and !user_id.equals('null')">
+                and user_id = #{user_id}
+            </if>
+            <if test="nick_name != null and !nick_name.equals('null')">
+                and nick_name = #{nick_name}
+            </if>
+            <if test="user_openid != null and !user_openid.equals('null')">
+                and user_openid = #{user_openid}
+            </if>
+        </where>
+    </select>
+    <update id="updateUser" parameterType="com.project.wechat.mbg.pojo.UserPo">
+        update t_user
+        <set>
+            <if test="nick_name != null">nick_name = #{nick_name},</if>
+            <if test="user_status != null"> user_status = #{user_status},</if>
+            <if test="gender != null">gender = #{gender},</if>
+            <if test="avatar_url != null"> avatar_url = #{avatar_url},</if>
+            <if test="user_campus != null"> user_campus = #{user_campus},</if>
+            <if test="user_introduce != null">user_introduce = #{user_introduce},</if>
+            <if test="user_praise != null">user_praise = #{user_praise},</if>
+            <if test="school_id != null">school_id = #{school_id},</if>
+        </set>
+        where user_openid = #{user_openid}
+    </update>
+    <select id="selectUserByPK" resultType="com.project.wechat.mbg.pojo.UserPo">
+        select * from t_user where user_id = #{userId}
+    </select>
+    <select id="selectUserCounts" resultType="Integer">
+        select count(*) from t_user;
+    </select>
+    <select id="selectUserByOpenId" resultType="com.project.wechat.mbg.pojo.UserPo">
+        select * from t_user where user_openid = #{openId}
+    </select>
+    <select id="searchSchoolById" parameterType="Integer" resultType="String">
+        select school_name from t_school where id = #{schoolId}
+    </select>
+    <select id="searchSchoolIdBySchoolName" parameterType="String" resultType="Integer">
+        select id from t_school where school_name = #{schoolName}
+    </select>
+    <select id="getUserStatus" resultType="Integer">
+        select user_status from t_user where user_id = #{userId}
+    </select>
+    <update id="setUserOnline">
+        update t_user
+        set user_status = 1
+        where user_id = #{userId}
+    </update>
+    <update id="setUserNotOnline">
+        update t_user
+        set user_status = 0
+        where user_id = #{userId}
+    </update>
+    <select id="getUserByIdList" resultType="com.project.wechat.mbg.pojo.UserPo">
+        select * from t_user where user_id in
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+                                #{item}
+        </foreach>
+    </select>
+    <select id="getFansIdById" resultType="integer">
+        select fans_id from t_fans where user_id = #{userId}
+    </select>
+    <select id="getAttentionById" resultType="integer">
+        select attention_id from t_attention where user_id = #{userId}
+    </select>
+    <select id="isMyAttention" resultType="integer">
+        select id from t_attention where user_id = #{userId} and attention_id = #{oppoId}
+    </select>
+    <select id="getUserThumbs" resultType="Integer">
+        select user_praise from t_user where user_id = #{userId}
+    </select>
+
+</mapper>

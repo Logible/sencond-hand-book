@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.wechat.dao.DataPoDao">
+    <select id="checkIsbnIsExist" resultType="com.project.wechat.mbg.pojo.DataPo">
+        select * from t_bdata where isbn = #{isbnNum}
+    </select>
+    <insert id="insertIntoData" parameterType="com.project.wechat.mbg.pojo.DataPo">
+        insert into t_bdata
+            (img,
+             author,
+             isbn,
+             format,
+             edition,
+             binding,
+             title,
+             produce,
+             gist,
+             paper,
+             price,
+             publisher,
+             page,
+             pubdate)
+        values (
+            #{img},
+            #{author},
+            #{isbn},
+            #{format},
+            #{edition},
+            #{binding},
+            #{title},
+            #{produce},
+            #{gist},
+            #{paper},
+            #{price},
+            #{publisher},
+            #{page},
+            #{pubdate}
+               );
+    </insert>
+</mapper>

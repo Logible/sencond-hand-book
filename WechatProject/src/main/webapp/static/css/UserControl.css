@@ -1,0 +1,17 @@
+.hide{
+    display: none;
+}
+.modal{
+    position:fixed;
+    left:50%;
+    top:50%;
+    width:500px;
+    height:600px;
+    margin-left:-200px;
+    margin-top:-250px;
+    z-index:10;
+    background-color:blueviolet;
+}
+.ADD{
+    /*标记为新增用户状态*/
+}

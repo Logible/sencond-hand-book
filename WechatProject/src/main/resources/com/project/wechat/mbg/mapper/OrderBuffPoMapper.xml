@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.wechat.mbg.mapper.OrderBuffPoMapper">
+  <resultMap id="BaseResultMap" type="com.project.wechat.mbg.pojo.OrderBuffPo">
+    <id column="orderb_id" jdbcType="INTEGER" property="orderbId" />
+    <result column="date" jdbcType="TIMESTAMP" property="date" />
+    <result column="location" jdbcType="VARCHAR" property="location" />
+    <result column="chat_wid" jdbcType="INTEGER" property="chatWid" />
+    <result column="agree_status" jdbcType="VARCHAR" property="agreeStatus" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    orderb_id, date, location, chat_wid, agree_status
+  </sql>
+  <select id="selectByExample" parameterType="com.project.wechat.mbg.pojo.OrderBuffPoExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_orderb
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_orderb
+    where orderb_id = #{orderbId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_orderb
+    where orderb_id = #{orderbId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.project.wechat.mbg.pojo.OrderBuffPoExample">
+    delete from t_orderb
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.project.wechat.mbg.pojo.OrderBuffPo">
+    insert into t_orderb (orderb_id, date, location, 
+      chat_wid, agree_status)
+    values (#{orderbId,jdbcType=INTEGER}, #{date,jdbcType=TIMESTAMP}, #{location,jdbcType=VARCHAR}, 
+      #{chatWid,jdbcType=INTEGER}, #{agreeStatus,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.project.wechat.mbg.pojo.OrderBuffPo">
+    insert into t_orderb
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orderbId != null">
+        orderb_id,
+      </if>
+      <if test="date != null">
+        date,
+      </if>
+      <if test="location != null">
+        location,
+      </if>
+      <if test="chatWid != null">
+        chat_wid,
+      </if>
+      <if test="agreeStatus != null">
+        agree_status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orderbId != null">
+        #{orderbId,jdbcType=INTEGER},
+      </if>
+      <if test="date != null">
+        #{date,jdbcType=TIMESTAMP},
+      </if>
+      <if test="location != null">
+        #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="chatWid != null">
+        #{chatWid,jdbcType=INTEGER},
+      </if>
+      <if test="agreeStatus != null">
+        #{agreeStatus,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.project.wechat.mbg.pojo.OrderBuffPoExample" resultType="java.lang.Long">
+    select count(*) from t_orderb
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_orderb
+    <set>
+      <if test="record.orderbId != null">
+        orderb_id = #{record.orderbId,jdbcType=INTEGER},
+      </if>
+      <if test="record.date != null">
+        date = #{record.date,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.location != null">
+        location = #{record.location,jdbcType=VARCHAR},
+      </if>
+      <if test="record.chatWid != null">
+        chat_wid = #{record.chatWid,jdbcType=INTEGER},
+      </if>
+      <if test="record.agreeStatus != null">
+        agree_status = #{record.agreeStatus,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_orderb
+    set orderb_id = #{record.orderbId,jdbcType=INTEGER},
+      date = #{record.date,jdbcType=TIMESTAMP},
+      location = #{record.location,jdbcType=VARCHAR},
+      chat_wid = #{record.chatWid,jdbcType=INTEGER},
+      agree_status = #{record.agreeStatus,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.project.wechat.mbg.pojo.OrderBuffPo">
+    update t_orderb
+    <set>
+      <if test="date != null">
+        date = #{date,jdbcType=TIMESTAMP},
+      </if>
+      <if test="location != null">
+        location = #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="chatWid != null">
+        chat_wid = #{chatWid,jdbcType=INTEGER},
+      </if>
+      <if test="agreeStatus != null">
+        agree_status = #{agreeStatus,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where orderb_id = #{orderbId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.project.wechat.mbg.pojo.OrderBuffPo">
+    update t_orderb
+    set date = #{date,jdbcType=TIMESTAMP},
+      location = #{location,jdbcType=VARCHAR},
+      chat_wid = #{chatWid,jdbcType=INTEGER},
+      agree_status = #{agreeStatus,jdbcType=VARCHAR}
+    where orderb_id = #{orderbId,jdbcType=INTEGER}
+  </update>
+</mapper>

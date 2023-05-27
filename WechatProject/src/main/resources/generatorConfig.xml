@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <!--引入数据库配置文件-->
+    <properties resource="generator.properties"/>
+
+    <context id="DB2Tables" targetRuntime="MyBatis3">
+        <!--默认不生成注释-->
+        <commentGenerator type="com.project.wechat.mbg.CommentGenerator">
+            <property name="suppressAllComments" value="true"/>
+            <property name="suppressDate" value="true"/>
+            <property name="addRemarkComments" value="true"/>
+        </commentGenerator>
+
+        <jdbcConnection driverClass="${jdbc.driverClass}"
+                        connectionURL="${jdbc.connectionURL}"
+                        userId="${jdbc.userId}"
+                        password="${jdbc.password}">
+        </jdbcConnection>
+
+        <!--存放pojo接口的路径-->
+        <javaModelGenerator targetPackage="com.project.wechat.mbg.pojo" targetProject=".\src\main\java"/>
+
+
+        <!--指定mapper.xml的路径-->
+        <sqlMapGenerator targetPackage="com.project.wechat.mbg.mapper"  targetProject=".\src\main\resources"/>
+
+        <!--指定mapper接口的路径-->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.project.wechat.mbg.mapper"  targetProject=".\src\main\java"/>
+
+
+ <!--       <table tableName="t_attention" domainObjectName="AttentionPo" />
+        <table tableName="t_chat_window" domainObjectName="ChatWindowPo" />
+        <table tableName="t_chats" domainObjectName="ChatsPo" />
+        <table tableName="t_fans" domainObjectName="FansPo" />
+        <table tableName="t_good_type" domainObjectName="GoodTypePo" />
+        <table tableName="t_goods" domainObjectName="GoodsPo" />
+        <table tableName="t_history_search" domainObjectName="HistorySearchPo" />
+        <table tableName="t_order" domainObjectName="OrderPo" />
+        <table tableName="t_school_campus" domainObjectName="RegionPo" />
+        <table tableName="t_seller" domainObjectName="sellerPo" />
+        <table tableName="t_seller_upload" domainObjectName="UploadPo" />
+        <table tableName="t_user" domainObjectName="UserPo" />
+        <table tableName="t_favourites" domainObjectName="FavouritesPo"/>
+        <table tableName="t_school" domainObjectName="SchoolPo"/>-->
+<!--        <table tableName="t_history_browsing" domainObjectName="HistoryBrowsing"/>-->
+<!--        <table tableName="t_order" domainObjectName="OrderPo_OTI"/>-->
+        <table tableName="t_orderb" domainObjectName="OrderBuffPo"/>
+
+
+
+    </context>
+</generatorConfiguration>

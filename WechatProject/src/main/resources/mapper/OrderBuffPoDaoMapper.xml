@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.wechat.dao.OrderBuffPoDao">
+    <insert id="createOrderBuff" parameterType="com.project.wechat.mbg.pojo.OrderBuffPo"
+    useGeneratedKeys="true" keyProperty="orderb_id">
+        insert into t_orderb
+        (
+            date,
+            location,
+            chat_wid,
+            agree_status
+        )
+        values (
+                #{date},
+                #{location},
+                #{chat_wid},
+                0
+               )
+    </insert>
+    <delete id="deleteOrderBuff">
+        delete from t_orderb where orderb_id = #{orderBuffId}
+    </delete>
+    <insert id="toBeFormalOrder" parameterType="com.project.wechat.mbg.pojo.OrderBuffPo">
+        insert into t_order
+        ( date,
+          seller_status,
+          buyer_status,
+          location,
+          chat_wid,
+          status,
+          agree_status
+         )
+         values
+             (
+              #{date},
+              0,
+              0,
+              #{location},
+              #{chat_wid},
+              0,
+              1
+             )
+    </insert>
+    <update id="updateOrderBuff" parameterType="com.project.wechat.mbg.pojo.OrderBuffPo">
+        update t_orderb
+        set  date = #{date},
+            location = #{location},
+            chat_wid = #{chat_wid},
+            agree_status = #{agree_status}
+        where orderb_id = #{orderb_id}
+    </update>
+</mapper>
